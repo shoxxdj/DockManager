@@ -1,0 +1,13 @@
+{
+	"name":"DockerManager",
+	"version":"0.0.1",
+	"dependencies" :{
+		"express":"~4.12.0",
+		"ejs":"~2.3.1",
+		"body-parser":"~1.10.1",
+		"cookie-session":"~1.1.0"
+	},
+	"author":"ShoxX",
+	"description":"Docker Easy and Leazy"
+
+}

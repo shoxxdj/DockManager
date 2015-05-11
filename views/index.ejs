@@ -1,0 +1,36 @@
+<%include static/head.ejs %>
+
+<div class='row'>
+	<div class='col-md-12'>
+		<div class="panel panel-primary"><!-- Runnings Dockers -->
+			<div class="panel-heading">	
+				<h3 class="panel-title">Running Dockers</h3>
+			</div>
+			<div id="basicInfo" class="panel-body">
+			</div><!-- end of panel body -->
+		</div><!--end of panel primary -->
+
+		<!--do stuff -->
+	</div>
+</div>
+
+<script type="text/javascript">
+
+function getBasicInfo(){
+	$("#basicInfo").html("aaa");	
+	$.ajax({
+		url:'/basicInfo',
+		type : 'GET',
+		success: function(html){
+			$("#basicInfo").html(html);
+		},
+	});
+}
+
+$(document).ready(function()
+{
+	getBasicInfo();
+});
+
+
+</script>

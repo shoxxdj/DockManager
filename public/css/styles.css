@@ -1,0 +1,22 @@
+body{
+	background-color: #bdc3c7;
+	width:99%;
+}
+
+.left-bar{
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  padding-right: 0;
+  padding-left: 0;
+  background-color: #bdc3c7;
+}
+
+.main{
+	background-color: #ecf0f1;
+}
+
+.topbar{
+	background-color: #bdc3c7;
+}
