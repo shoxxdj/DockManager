@@ -1,5 +1,5 @@
 //Docker Servers
-var devices=['localhost','192.168.1.22'];
+var devices=['localhost'];
 var port="31337";
 
 //Server
