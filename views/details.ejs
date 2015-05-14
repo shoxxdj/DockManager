@@ -1,5 +1,50 @@
 <%include static/head.ejs %>
-<body>
+<div class="row">
+	<div class="col-md-4">
 		<%= res["Config"]["Image"] %>
-</body>
-</html>
+		<b><%= res["Name"] %></b>
+		<%= res["Config"]["Cmd"] %>
+		<%= res["Created"]%>
+		<%= res["Hostname"] %>
+		<% var net=res["NetworkSettings"]; %>
+		<%= JSON.stringify(net["Ports"]) %>
+		<%= net["Ports"]["HostPort"] %>
+	</div>
+	<div class="col-md-8">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Processus
+			</div>
+ 			<div class="panel-body">
+   				<div id="process"></div>
+   			</div>
+   		</div>
+ 	</div>
+  
+</div>
+	
+	</div>
+</div>
+
+<script type="text/javascript">
+	
+	function getProcess()
+{
+	$.ajax({
+		url: '/process/<%= ip %>/<%= id %>',
+		type: 'GET',
+		success:function(html){
+			$("#process").html(html);
+		}
+	})
+}
+
+$(document).ready(function()
+{
+	getProcess();
+});
+
+</script>
+
+
+<%include static/foot.ejs %>

@@ -1,4 +1,4 @@
-<%include static/head.ejs %>
+<% include static/head.ejs %>
 
 <div class='row'>
 	<div class='col-md-12'>
@@ -14,10 +14,9 @@
 
 			</div><!-- end of panel body -->
 		</div><!--end of panel primary -->
-
-		<!--do stuff -->
 	</div>
 </div>
+
 
 <script type="text/javascript">
 
@@ -31,6 +30,7 @@ function getBasicInfo(){
 	});
 }
 
+
 $(document).ready(function()
 {
 	getBasicInfo();
@@ -38,3 +38,5 @@ $(document).ready(function()
 
 
 </script>
+
+<% include static/foot.ejs %>

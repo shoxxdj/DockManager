@@ -1,10 +1,28 @@
-<% include static/head.ejs %>
-<body>
-
-<%= res["Processes"] %>
-
-
-</body>
-</html>
+<table class="table table-responsive table-bordered table-condensed table-striped">
+<tr>
+<% for (i=0;i<res["Titles"].length;i++)
+	{
+%>
+		<th><%= res["Titles"][i] %></th>
+<%
+	}
+%>
+</tr>
+<%	for(i=0;i<res["Processes"].length;i++)
+	{
+%>
+	<tr>
+	<% for(j=0;j<res["Titles"].length;j++)
+		{
+	%>
+		<td><%=res["Processes"][i][j] %></td>
+	<%
+		}
+	%>
+	</tr>
+<%
+	} 
+%>
+</table>
 
 

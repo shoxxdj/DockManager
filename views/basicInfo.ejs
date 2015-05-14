@@ -19,7 +19,7 @@ for (var i=0;i<res.length;i++)
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-md-6">
-						<a href="/details/<%= ip %>/<%= (re[j]["Id"]).substring(0,12) %>"/>
+						<a href="/details/<%= ip %>/<%= (re[j]["Id"]).substring(0,12) %>">
 							Server <%= i-1 %> Image <%= j+1 %> 
 						</a>
 					</div>
@@ -48,8 +48,8 @@ for (var i=0;i<res.length;i++)
 							<table class="table table-striped">
 								<tr>
 									<th>IP</th>
-									<th>Applicaiton Port</th>
-									<th>Exposed Port</th>
+									<th><span class="glyphicon glyphicon-log-in"></span></th>
+									<th><span class="glyphicon glyphicon-log-out"</th>
 								</tr>
 								<% for(k=0;k<re[j]["Ports"].length;k++){%> 
 								<tr>

@@ -1,2 +1,63 @@
-<h1> Images disponibles sur le serveur : </h1>
-<pre><%= images %></pre>
+<% include static/head.ejs %>
+
+<div id="action" class="row" style="display:none">
+	<div id="actionTable" class="col-md-6 col-md-offset-3">
+		<table class="table table-striped">
+			<tr><td>Image Name</td><td id="action_imageName"></td></tr>
+			<tr><td>ID</td><td id="action_imageID"></td></tr>
+			<tr><td>IP</td><td id="action_imageIP"></td></tr>
+		</table>
+		<div class="row">
+			<div class="col-md-6">
+				<button id="action_validationButton" onclick="alert('error');" type="button" class="btn btn-success btn-block">Create</button>
+			</div>
+			<div class="col-md-6">
+				<button type="button" class="btn btn-danger btn-block" disabled="disabled">Delete</button>
+			</div>
+		</div>
+	</div>
+	<div id="actionLogs" style="display:none">
+		<center>
+			<img src="http://sierrafire.cr.usgs.gov/images/loading.gif" width="15%"/>
+		</center>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-primary"><!-- Runnings Dockers -->
+			<div class="panel-heading">	
+				<h3 class="panel-title">Runnable Images</h3>
+			</div>
+			<div id="runnableImages" class="panel-body">
+				<div class="loader">
+					<center>Loading</center>
+				</div>
+			</div><!-- end of panel body -->
+		</div><!--end of panel primary -->
+	</div>
+</div>
+
+<script type="text/javascript">
+
+
+function getRunnableImages()
+{
+	$.ajax({
+		url: '/runnableImages',
+		type: 'GET',
+		success:function(html){
+			$("#runnableImages").html(html);
+		}
+	})
+}
+
+$(document).ready(function()
+{
+	getRunnableImages();
+});
+
+
+</script>
+
+<% include static/foot.ejs %>
