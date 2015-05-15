@@ -58,19 +58,3 @@
 
 %>
 
-<script type="text/javascript">
-	
-function actionImage(ip,id,name){
-	$("#action").css("display","block");
-	$("#action_imageName").html(name);
-	$("#action_imageID").html(id);
-	$("#action_imageIP").html(ip);
-	$("#action_validationButton").attr("onclick","createMachineValidation('"+ip+"','"+id+"','"+name+"')");
-}
-function createMachineValidation(id,ip,name)
-{
-	$("#actionTable").attr("class","col-md-6");
-	$("#actionLogs").css("display","block");
-}
-
-</script>

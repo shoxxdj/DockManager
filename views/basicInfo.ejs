@@ -1,5 +1,6 @@
 <% var panel_colors=["default","default","default","default"]; %>
 <% var passages=0;
+   var server=1;
 for (var i=0;i<res.length;i++)
 {
 	ip=res[i];
@@ -18,17 +19,9 @@ for (var i=0;i<res.length;i++)
 		<div class="panel panel-<%= panel_colors[j%panel_colors.length] %>">
 			<div class="panel-heading">
 				<div class="row">
-					<div class="col-md-6">
-						<a href="/details/<%= ip %>/<%= (re[j]["Id"]).substring(0,12) %>">
-							Server <%= i-1 %> Image <%= j+1 %> 
-						</a>
-					</div>
-					<div class="col-md-1 col-md-offset-3">
-						<span style="color:#3cd27b" class="glyphicon glyphicon-play"></span>
-					</div>
-					<div class="col-md-1">
-						<span style="color:#e74c3c" class="glyphicon glyphicon-stop"></span>
-					</div>
+					<b><a href="/details/<%= ip %>/<%= (re[j]["Id"]).substring(0,12) %>">
+							Server <%= server %> Image <%= j+1 %> 
+					</a></b>
 				</div>
 			</div>
 			<div class="panel-body">
@@ -74,7 +67,8 @@ for (var i=0;i<res.length;i++)
 <%
 			}	
 			passages++;
-		}	
+		}
+		server++;	
 	}	
 	if(passages%3==1)
 	{

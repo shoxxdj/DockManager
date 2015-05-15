@@ -1,5 +1,5 @@
 //Docker Servers
-var devices=['localhost','192.168.1.22'];
+var devices=['localhost'];
 var port="31337";
 
 //Server
@@ -11,8 +11,20 @@ require('shelljs/global');
 
 //HTTP requests
 var request=require('request');
+//HTTP requests json
+var requestJson = require('request-json');
+// Ajouter ca dans la vue concernée var client = request.createClient('http://addresse:port/');
+
 //Async 
 var async = require("async");
+
+//Body Parser
+var bodyParser = require('body-parser');
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+})); 
+
  
 app.use(express.static(__dirname+'/public'));
 
@@ -84,12 +96,63 @@ app.get('/runnableImages',function(req,res){
 		);
 });
 
-app.get('/images/:ip/:id',function(req,res){
-	request('')
+app.post('/images/:ip/:image/create',function(req,res){
+	if(req.body.cmd!="")
+	{
+		var adresse=req.params.ip;
+		var cmd=req.body.cmd;
+		console.log(cmd);
+		var image=req.params.image;
+		var data = {
+			"Hostname":"",
+			"User":"",
+	     	"Memory":0,
+	     	"MemorySwap":0,
+	     	"AttachStdin":true,
+	     	"AttachStdout":true,
+	     	"AttachStderr":true,
+	     	"PortSpecs":null,
+	     	"Privileged": false,
+	     	"Tty":true,
+	     	"OpenStdin":true,
+	     	"StdinOnce":false,
+	     	"Env":null,
+	     	"Dns":null,
+	     	"Image":image,
+	     	"Volumes":{},
+	     	"VolumesFrom":"",
+	     	"WorkingDir":"",
+	     	"Cmd":cmd
+		}
+
+		var client = requestJson.createClient('http://'+adresse+':'+port+'/');
+		client.post('containers/create', data, function(err, response, body) {
+		  if(response.statusCode==201)
+		  {
+		  	id=response.body.Id;
+			console.log(id);
+		  	client.post('containers/'+id+'/start',null,function(err,rep,body)
+			{
+				console.log(rep.statusCode);
+				if(rep.statusCode==204)
+				{
+					res.end("success");
+				}
+				else
+				{
+					res.end("error");
+				}
+			});
+		  }
+		});
+	}
+	else
+	{
+		res.end("error");
+	}
 });
 
-//Contnairs Page
-
+//Containers Page
 app.get('/containers',function(req,res){
 	containers=[];
 	async.each(devices, //Arry to loop
@@ -117,26 +180,9 @@ app.get('/containers',function(req,res){
 			console.log(containers);
 			res.render('containers.ejs',{res:containers});
 		});
-
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//Detail Page
 app.get('/details/:address/:id',function(req,res){
 	if(devices.indexOf(req.params.address)>-1 && req.params.id!="")
 	{
@@ -185,30 +231,7 @@ app.get('/process/:address/:id',function(req,res){
 	}
 });
 
-
-
-app.get('/version',function(req,res){
-	request('http://192.168.1.22:31337/version',function(error,response,body)
-	{
-		if(!error && response.statusCode==200){
-			res.render('version.ejs',{res:devices})
-		}
-	})
-});
-
-
-
-
-app.get('/status/:id',function(req,res){
-	if(req.params.id != '')
-		{
-			id = req.params.id;
-			status = exec("docker inspect "+id).output;
-			res.render('stats.ejs',{res:JSON.parse(status)});
-		}
-});
-
-
+// Run Server ! 
 var server= app.listen(3000,function(){
 	var host = server.address().address;
 	var port = server.address().port;

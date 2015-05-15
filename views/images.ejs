@@ -1,25 +1,39 @@
 <% include static/head.ejs %>
 
 <div id="action" class="row" style="display:none">
-	<div id="actionTable" class="col-md-6 col-md-offset-3">
-		<table class="table table-striped">
-			<tr><td>Image Name</td><td id="action_imageName"></td></tr>
-			<tr><td>ID</td><td id="action_imageID"></td></tr>
-			<tr><td>IP</td><td id="action_imageIP"></td></tr>
-		</table>
-		<div class="row">
-			<div class="col-md-6">
-				<button id="action_validationButton" onclick="alert('error');" type="button" class="btn btn-success btn-block">Create</button>
+	<div class="col-md-12">
+		<div class="panel panel-primary">
+			<div class="panel-heading">	
+				<h3 class="panel-title">Configure Image</h3>
 			</div>
-			<div class="col-md-6">
-				<button type="button" class="btn btn-danger btn-block" disabled="disabled">Delete</button>
+			<div id="mainActionDiv" class="panel-body row">
+				<div id="actionTable" class="col-md-6">
+					<table class="table table-striped">
+						<tr><td>Image Name</td><td id="action_imageName"></td></tr>
+						<tr><td>ID</td><td id="action_imageID"></td></tr>
+						<tr><td>IP</td><td id="action_imageIP"></td></tr>
+					</table>
+				</div>
+
+				<div id="createOptionsForm" class="col-md-6" style="display:none">
+					<div class="form-horizontal" id="optionForm">
+						<div class="form-group">
+							<label for="inputEmail3" class="col-sm-2 control-label">Cmd</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="createOptionsForm_command" name="command" placeholder="/bin/bash -D">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<button onclick="optionsFormSubmit()" class="btn btn-default">Sign in</button>
+							</div>
+						</div>
+						<div class="row" id="createOptionsFormError">
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div id="actionLogs" style="display:none">
-		<center>
-			<img src="http://sierrafire.cr.usgs.gov/images/loading.gif" width="15%"/>
-		</center>
 	</div>
 </div>
 
@@ -50,6 +64,48 @@ function getRunnableImages()
 			$("#runnableImages").html(html);
 		}
 	})
+}
+
+function actionImage(ip,id,name){
+	ipAddress=ip;
+	idImage=id;
+	nameImage=name;
+
+	$("#action").css("display","block");
+	$("#createOptionsForm").css("display","block");
+	$("#action_imageName").html(name);
+	$("#action_imageID").html(id);
+	$("#action_imageIP").html(ip);
+//	$("#action_validationButton").attr("onclick","createMachineValidation('"+ip+"','"+id+"','"+name+"')");
+}
+
+function optionsFormSubmit(){
+	$.ajax({
+		url:'/images/'+ipAddress+'/'+nameImage+'/create',
+		type:'POST',
+		data:{cmd:$("#createOptionsForm_command").val()},
+		success:function(html){
+			if(html=="success")
+			{
+				$("#mainActionDiv").html("<center><h3>Container Successfuly Created !</h3><p>Will redirect to home in <span id='countdown'>5</span> seconds ..</p></center>");
+				  var count = 4;
+				  var countdown = setInterval(function(){
+				    $("#countdown").html(count);
+				    if (count == 0) {
+				      clearInterval(countdown);
+				      document.location.href="/";
+				    }
+				    count--;
+				  }, 1000);
+
+			}
+			else
+			{
+				$("#createOptionsFormError").html("<center><h3> An Error as occured </h3> <p> Please RTFM ! </p></center>");
+				$("#createOptionsForm_command").css("border-color","#e74c3c");
+			}
+		}
+	});
 }
 
 $(document).ready(function()
