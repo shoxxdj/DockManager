@@ -25,7 +25,9 @@ function getBasicInfo(){
 		url:'/basicInfo',
 		type : 'GET',
 		success: function(html){
-			$("#basicInfo").html(html);
+			if(!html==""){
+				$("#basicInfo").html(html);
+			}
 		},
 	});
 }

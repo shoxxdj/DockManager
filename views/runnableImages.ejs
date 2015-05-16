@@ -16,27 +16,21 @@
 	<%
 		}
 	%>
-		<div class="col-md-3 table-responsive">
+		<div class="col-md-4 table-responsive">
 		<%= ip %>
-			<table class="table ">
+			<div class="list-group" style="overflow:hidden">
 <%
 			for(var j=0;j<re.length;j++)
 			{	
 %>
-				<tr>
-					<td>
-						<span onclick="actionImage('<%= ip %>','<%= (re[j]["Id"]).substring(0,12) %>','<%= re[j]["RepoTags"] %>')"class="glyphicon glyphicon-play"></span>
-						
-					</td>
-					<td>
-						<%= re[j]["RepoTags"] %>
-					</td>
-				</tr>
+				<a class="list-group-item"  onclick="actionImage('<%= ip %>','<%= (re[j]["Id"]).substring(0,12) %>','<%= re[j]["RepoTags"] %>')">
+					<%= re[j]["RepoTags"] %>
+				</a>
 			
 <%
 			}
 %>
-			</table>
+			</div>
 		</div>
 	<% if((passages+1)%3==0)
 		{

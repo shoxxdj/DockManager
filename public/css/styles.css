@@ -1,5 +1,6 @@
 body{
 	background-color: #bdc3c7;
+	margin: auto;
 }
 
 .left-bar{
@@ -13,7 +14,7 @@ body{
 }
 
 .main{
-	background-color: #ecf0f1;
+
 }
 
 .topbar{
