@@ -103,6 +103,7 @@ app.post('/images/:ip/:image/create',function(req,res){
 		var cmd=req.body.cmd;
 		console.log(cmd);
 		var image=req.params.image;
+//		var mac = req.params.mac;
 		var data = {
 			"Hostname":"",
 			"User":"",
@@ -123,11 +124,11 @@ app.post('/images/:ip/:image/create',function(req,res){
 	     	"VolumesFrom":"",
 	     	"WorkingDir":"",
 	     	"Cmd":cmd,
-	     	"MacAddress": mac, // if network enabled ( and all the rest)
-	     	"ExposedPorts":{"22/tcp":{}},
-	     	"HostConfig": {
-	     		"NetworkMode": "bridge",
-	     		"PortBindings":{"22/tcp":[{"HostPort":"1234"}]}
+//	     	"MacAddress": mac, // if network enabled ( and all the rest)
+//	     	"ExposedPorts":{"22/tcp":{}},
+//	     	"HostConfig": {
+//	     		"NetworkMode": "bridge",
+//	     		"PortBindings":{"22/tcp":[{"HostPort":"1234"}]}
 	     	}
 		}
 
