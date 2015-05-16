@@ -122,7 +122,13 @@ app.post('/images/:ip/:image/create',function(req,res){
 	     	"Volumes":{},
 	     	"VolumesFrom":"",
 	     	"WorkingDir":"",
-	     	"Cmd":cmd
+	     	"Cmd":cmd,
+	     	"MacAddress": mac, // if network enabled ( and all the rest)
+	     	"ExposedPorts":{"22/tcp":{}},
+	     	"HostConfig": {
+	     		"NetworkMode": "bridge",
+	     		"PortBindings":{"22/tcp":[{"HostPort":"1234"}]}
+	     	}
 		}
 
 		var client = requestJson.createClient('http://'+adresse+':'+port+'/');
