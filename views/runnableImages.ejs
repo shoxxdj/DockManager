@@ -22,12 +22,14 @@
 <%
 			for(var j=0;j<re.length;j++)
 			{	
-%>
-				<a class="list-group-item"  onclick="actionImage('<%= ip %>','<%= (re[j]["Id"]).substring(0,12) %>','<%= re[j]["RepoTags"] %>')">
-					<%= re[j]["RepoTags"] %>
-				</a>
-			
+			if(re[j]["RepoTags"]!="<none>:<none>")
+				{
+%>				
+					<a class="list-group-item"  onclick="actionImage('<%= ip %>','<%= (re[j]["Id"]).substring(0,12) %>','<%= re[j]["RepoTags"] %>')">
+						<%= re[j]["RepoTags"] %>
+					</a>				
 <%
+				}
 			}
 %>
 			</div>
