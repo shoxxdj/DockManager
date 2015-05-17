@@ -23,17 +23,16 @@
 								<input type="text" class="form-control" id="createOptionsForm_command" name="command" placeholder="/bin/bash -D">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="inputPort" class="col-sm-2 control-label">Exposed Ports</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control"
-								id="createOptionsForm_Port"/>
-							</div>
-						</div>
+						<div id="ports">
 
+						</div>
+						
 						<div class="form-group">
-							<div class="col-sm-offset-2 col-sm-10">
-								<button onclick="optionsFormSubmit()" class="btn btn-default">Create Container</button>
+							<div class="col-sm-offset-2 col-sm-4">
+								<button id="ButtonNetwork" onclick="addNetwork()" class="btn btn-default">Add Networking</button>
+							</div>
+							<div class="col-sm-offset-2 col-sm-4">
+								<button id="ButtonCreateContainer" onclick="optionsFormSubmit()" class="btn btn-default">Create Container</button>
 							</div>
 						</div>
 						<div class="row" id="createOptionsFormError">
@@ -87,6 +86,35 @@ function actionImage(ip,id,name){
 //	$("#action_validationButton").attr("onclick","createMachineValidation('"+ip+"','"+id+"','"+name+"')");
 }
 
+function optionsFormSubmitNetwork(){
+	$.ajax({
+		url:'/images/'+ipAddress+'/'+nameImage+'/create/network',
+		type:'POST',
+		data:{cmd:$("#createOptionsForm_command").val(),exposed:portExposedToJson(),bindings:portListToJson(),mac:$("#createOptionsForm_mac").val()},
+		success:function(html){
+			if(html=="success")
+			{
+				$("#mainActionDiv").html("<center><h3>Container Successfuly Created !</h3><p>Will redirect to home in <span id='countdown'>5</span> seconds ..</p></center>");
+				  var count = 4;
+				  var countdown = setInterval(function(){
+				    $("#countdown").html(count);
+				    if (count == 0) {
+				      clearInterval(countdown);
+				      document.location.href="/";
+				    }
+				    count--;
+				  }, 1000);
+
+			}
+			else
+			{
+				$("#createOptionsFormError").html("<center><h3> An Error as occured </h3> <p> Please RTFM ! </p></center>");
+				$("#createOptionsForm_command").css("border-color","#e74c3c");
+			}
+		}
+	});
+}
+
 function optionsFormSubmit(){
 	$.ajax({
 		url:'/images/'+ipAddress+'/'+nameImage+'/create',
@@ -115,6 +143,57 @@ function optionsFormSubmit(){
 		}
 	});
 }
+
+function addNetwork()
+{
+	$("#ButtonNetwork").attr('onclick','addPort()');
+	$("#ButtonNetwork").html("Add Port");
+	$("#ButtonCreateContainer").attr('onclick','optionsFormSubmitNetwork()');
+	$("#ports").append('<div class="form-group"><label for="inputPort" class="col-sm-2 control-label">Mac Address</label><div class="col-sm-10"><input id="createOptionsForm_mac" type="text" placeholder="aa:bb:cc:dd:ee:ff" class="form-control "></div></div>');
+	$("#ports").append('<div class="form-group"><label for="inputPort" class="col-sm-2 control-label">Exposed Ports</label><div class="col-sm-10"><input type="text" placeholder="External,Internal" class="form-control createOptionsForm_Port"></div></div>');
+}
+
+function addPort()
+{
+	$("#ports").append('<div class="form-group"><label for="inputPort" class="col-sm-2 control-label">Exposed Ports</label><div class="col-sm-10"><input type="text" placeholder="External,Internal" class="form-control createOptionsForm_Port"></div></div>');
+}
+function portListToJson()
+{
+	var PortList="{"
+	$(".createOptionsForm_Port").each(function(){
+		   
+		if($(this).val()!="")
+		{
+			var val = $(this).val();
+			var Ports= val.split(",");
+			PortList+='"'+Ports[1]+'/tcp":[{"HostPort":"'+Ports[0]+'"}],';
+		}
+	});
+	PortList=PortList.substring(0,PortList.length-1);
+	PortList+="}";
+	console.log(typeof(PortList));
+	return JSON.stringify(PortList);
+}
+
+function portExposedToJson()
+{
+	var ExposedPort="{"
+	$(".createOptionsForm_Port").each(function(){
+		   
+		if($(this).val()!="")
+		{
+			var val = $(this).val();
+			var Ports= val.split(",");
+			ExposedPort+='"'+Ports[1]+'/tcp" : {},'
+		}
+	});
+	ExposedPort=ExposedPort.substring(0, ExposedPort.length-1);
+	ExposedPort+="}";
+	console.log(ExposedPort);
+	return ExposedPort;
+}
+
+
 
 $(document).ready(function()
 {

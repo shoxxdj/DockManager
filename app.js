@@ -25,6 +25,8 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 })); 
 
+var Type = require('type-of-is');
+
  
 app.use(express.static(__dirname+'/public'));
 
@@ -123,13 +125,7 @@ app.post('/images/:ip/:image/create',function(req,res){
 	     	"Volumes":{},
 	     	"VolumesFrom":"",
 	     	"WorkingDir":"",
-	     	"Cmd":cmd,
-//	     	"MacAddress": mac, // if network enabled ( and all the rest)
-//	     	"ExposedPorts":{"22/tcp":{}},
-//	     	"HostConfig": {
-//	     		"NetworkMode": "bridge",
-//	     		"PortBindings":{"22/tcp":[{"HostPort":"1234"}]}
-	     	}
+	     	"Cmd":cmd
 		}
 
 		var client = requestJson.createClient('http://'+adresse+':'+port+'/');
@@ -158,6 +154,93 @@ app.post('/images/:ip/:image/create',function(req,res){
 		res.end("error");
 	}
 });
+
+app.post('/images/:ip/:image/create/network',function(req,res){
+	if(req.body.cmd!="")
+	{
+		var adresse=req.params.ip;
+		var cmd=req.body.cmd;
+		console.log(cmd);
+		var image=req.params.image;
+		var mac = req.body.mac;
+		var exposedport = req.body.exposed;
+		var bindings = req.body.bindings;
+
+//		exposedport = Type.string(exposedport);
+//		exposedport = JSON.stringify(exposedport);
+		exposedport = JSON.parse(exposedport); //TRANSFORM AS OBJ
+
+//		bindings = Type.string(bindings);
+//		bindings = JSON.stringify(bindings);
+		bindings = JSON.parse(bindings); //TRANSFORM AS OBJ
+
+		console.log(Type(bindings));
+		console.log(Type(exposedport)); //FIX THIS 
+		console.log(Type(bindings));
+		var data = {
+			"Hostname":"",
+			"User":"",
+	     	"Memory":0,
+	     	"MemorySwap":0,
+	     	"AttachStdin":true,
+	     	"AttachStdout":true,
+	     	"AttachStderr":true,
+	     	"PortSpecs":null,
+	     	"Privileged": false,
+	     	"Tty":true,
+	     	"OpenStdin":true,
+	     	"StdinOnce":false,
+	     	"Env":null,
+	     	"Dns":null,
+	     	"Image":image,
+	     	"Volumes":{},
+	     	"VolumesFrom":"",
+	     	"WorkingDir":"",
+	     	"NetworkDisabled": false,
+
+	     	"MacAddress": "", 
+	     	"ExposedPorts": exposedport,
+	     	"HostConfig": {
+	     		"NetworkMode": "bridge",
+	     		"PortBindings": bindings,
+	     		"PublishAllPorts": false,
+	     		"LxcConf":[]
+	     	},
+	     	"Cmd":cmd
+		}
+		console.log(data);
+		var client = requestJson.createClient('http://'+adresse+':'+port+'/');
+		client.post('containers/create', data, function(err, response, body) {
+		  if(response.statusCode==201)
+		  {
+		  	id=response.body.Id;
+			console.log(id);
+		  	client.post('containers/'+id+'/start',null,function(err,rep,body)
+			{
+				console.log(rep.statusCode);
+				if(rep.statusCode==204)
+				{
+					res.end("success");
+				}
+				else
+				{
+					console.log(body);
+					res.end("error");
+				}
+			});
+		  }
+		});
+	}
+	else
+	{
+		res.end("error");
+	}
+});
+
+
+
+
+
 
 //Containers Page
 app.get('/containers',function(req,res){
