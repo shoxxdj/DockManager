@@ -6,9 +6,6 @@ var port="31337";
 var express = require('express');
 var app= express();
 
-//Cmd execution
-require('shelljs/global');
-
 //HTTP requests
 var request=require('request');
 //HTTP requests json
@@ -40,7 +37,7 @@ app.get('/images',function(req,res){
 //Index Page
 app.get('/basicInfo',function(req,res){
 	running_images=[];
-	async.each(devices, //Arry to loop
+	async.each(devices, //Array to loop
 		function(item,callback) // To do for each item in array
 		{
 			console.log(item);
@@ -60,8 +57,6 @@ app.get('/basicInfo',function(req,res){
 		},
 		function(err) // une fois que tout est finit faire : 
 		{
-			console.log("all done");
-			console.log(running_images);
 			res.render('basicInfo.ejs',{res:running_images});
 		});
 
@@ -89,8 +84,6 @@ app.get('/runnableImages',function(req,res){
 		},
 		function(err)
 		{
-			console.log("all done");
-			console.log(runnable_images);
 			res.render('runnableImages.ejs',{res:runnable_images});
 		}
 		);
@@ -101,9 +94,7 @@ app.post('/images/:ip/:image/create',function(req,res){
 	{
 		var adresse=req.params.ip;
 		var cmd=req.body.cmd;
-		console.log(cmd);
 		var image=req.params.image;
-//		var mac = req.params.mac;
 		var data = {
 			"Hostname":"",
 			"User":"",
@@ -131,10 +122,8 @@ app.post('/images/:ip/:image/create',function(req,res){
 		  if(response.statusCode==201)
 		  {
 		  	id=response.body.Id;
-			console.log(id);
 		  	client.post('containers/'+id+'/start',null,function(err,rep,body)
 			{
-				console.log(rep.statusCode);
 				if(rep.statusCode==204)
 				{
 					res.end("success");
@@ -158,22 +147,13 @@ app.post('/images/:ip/:image/create/network',function(req,res){
 	{
 		var adresse=req.params.ip;
 		var cmd=req.body.cmd;
-		console.log(cmd);
 		var image=req.params.image;
 		var mac = req.body.mac;
 		var exposedport = req.body.exposed;
 		var bindings = req.body.bindings;
 
-//		exposedport = Type.string(exposedport);
-//		exposedport = JSON.stringify(exposedport);
 		exposedport = JSON.parse(exposedport); //TRANSFORM AS OBJ
-		exposedport = JSON.parse(exposedport);
-		console.log(exposedport);
-//		bindings = Type.string(bindings);
-//		bindings = JSON.stringify(bindings);
 		bindings = JSON.parse(bindings); //TRANSFORM AS OBJ
-		bindings = JSON.parse(bindings);
-		console.log(bindings);
 
 		var data = {
 			"Hostname":"",
@@ -196,7 +176,7 @@ app.post('/images/:ip/:image/create/network',function(req,res){
 	     	"WorkingDir":"",
 	     	"NetworkDisabled": false,
 
-	     	"MacAddress": "", 
+	     	"MacAddress": mac, 
 	     	"ExposedPorts": exposedport,
 	     	"HostConfig": {
 	     		"NetworkMode": "bridge",
@@ -206,23 +186,19 @@ app.post('/images/:ip/:image/create/network',function(req,res){
 	     	},
 	     	"Cmd":cmd
 		}
-		console.log(data);
 		var client = requestJson.createClient('http://'+adresse+':'+port+'/');
 		client.post('containers/create', data, function(err, response, body) {
 		  if(response.statusCode==201)
 		  {
 		  	id=response.body.Id;
-			console.log(id);
 		  	client.post('containers/'+id+'/start',null,function(err,rep,body)
 			{
-				console.log(rep.statusCode);
 				if(rep.statusCode==204)
 				{
 					res.end("success");
 				}
 				else
 				{
-					console.log(body);
 					res.end("error");
 				}
 			});
@@ -246,12 +222,10 @@ app.get('/containers',function(req,res){
 	async.each(devices, //Arry to loop
 		function(item,callback) // To do for each item in array
 		{
-			console.log(item);
 			request('http://'+item+':'+port+'/containers/json?all=1&size=1&limit=1',function(error,response,body)
 			{
 				if(!error && response.statusCode==200)
 				{
-					console.log("recu");
 					containers.push(item);
 					containers.push(JSON.parse(body));
 					callback(); // ne pas oublier !
@@ -264,8 +238,6 @@ app.get('/containers',function(req,res){
 		},
 		function(err) // une fois que tout est finit faire : 
 		{
-			console.log("all done");
-			console.log(containers);
 			res.render('containers.ejs',{res:containers});
 		});
 });
@@ -280,7 +252,6 @@ app.get('/details/:address/:id',function(req,res){
 		{
 			if(!error && response.statusCode==200)
 			{
-				console.log(JSON.parse(body));
 				res.render('details.ejs',{res:JSON.parse(body),ip:address,id:id});
 			}
 			else
@@ -304,7 +275,6 @@ app.get('/process/:address/:id',function(req,res){
 		{
 			if(!error && response.statusCode==200)
 			{
-				console.log(JSON.parse(body));
 				res.render('process.ejs',{res:JSON.parse(body)});
 			}
 			else
@@ -323,4 +293,5 @@ app.get('/process/:address/:id',function(req,res){
 var server= app.listen(3000,function(){
 	var host = server.address().address;
 	var port = server.address().port;
+	console.log("Running !");
 });

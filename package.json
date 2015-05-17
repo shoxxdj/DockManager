@@ -6,8 +6,10 @@
     "cookie-session": "~1.1.0",
     "ejs": "~2.3.1",
     "express": "~4.12.0",
-    "request-json": "^0.5.3"
+    "request":"~2.55.0",
+    "request-json": "^0.5.3",
+    "async":"~0.9.0"
   },
   "author": "ShoxX",
-  "description": "Docker Easy and Leazy"
+  "description": "Docker Easy and Lazy"
 }
