@@ -25,8 +25,6 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 })); 
 
-var Type = require('type-of-is');
-
  
 app.use(express.static(__dirname+'/public'));
 
@@ -169,14 +167,14 @@ app.post('/images/:ip/:image/create/network',function(req,res){
 //		exposedport = Type.string(exposedport);
 //		exposedport = JSON.stringify(exposedport);
 		exposedport = JSON.parse(exposedport); //TRANSFORM AS OBJ
-
+		exposedport = JSON.parse(exposedport);
+		console.log(exposedport);
 //		bindings = Type.string(bindings);
 //		bindings = JSON.stringify(bindings);
 		bindings = JSON.parse(bindings); //TRANSFORM AS OBJ
+		bindings = JSON.parse(bindings);
+		console.log(bindings);
 
-		console.log(Type(bindings));
-		console.log(Type(exposedport)); //FIX THIS 
-		console.log(Type(bindings));
 		var data = {
 			"Hostname":"",
 			"User":"",

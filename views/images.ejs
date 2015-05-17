@@ -171,8 +171,7 @@ function portListToJson()
 	});
 	PortList=PortList.substring(0,PortList.length-1);
 	PortList+="}";
-	console.log(typeof(PortList));
-	return JSON.stringify(PortList);
+	return PortList;
 }
 
 function portExposedToJson()
