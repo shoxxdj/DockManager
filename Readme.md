@@ -15,7 +15,7 @@ $ docker -d -H 10.10.10.10:31337 #enable remote connection from 10.10.10.10 to E
 
 ###Stil in development ! 
 To Do list : 
-* Port binding in image creation
+* ~~Port binding in image creation~~
 * DockerFile Uplaod
 * Stop containers
 * Restart containers
