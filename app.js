@@ -1,6 +1,4 @@
-//Docker Servers
-var devices=['localhost'];
-var port="31337";
+require('./conf.js');
 
 //Server
 var express = require('express');
