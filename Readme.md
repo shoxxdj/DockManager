@@ -41,6 +41,13 @@ Let's talk about it in the Issues
 
 ### Installation
 
+```sh
+$ git clone https://github.com/shoxxdj/DockManager.git Dockmanager
+$ cd Dockmanager
+$ npm install
+$ node app.js
+```
+
 Edit the configuration.js file.
 Foreach docker server that you want to manage add it to the devices array.
 Set the port that your dockers are listening to in the port variable.
