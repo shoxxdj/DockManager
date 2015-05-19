@@ -15,13 +15,19 @@ for (var i=0;i<res.length;i++)
 <%
 		}	
 %>
-	<div class="col-md-4"> 
+	<div class="col-md-4" id='<%= re[j]["Image"]%>'> 
 		<div class="panel panel-<%= panel_colors[j%panel_colors.length] %>">
 			<div class="panel-heading">
 				<div class="row">
+				<div class="col-md-8">
 					<b><a href="/details/<%= ip %>/<%= (re[j]["Id"]).substring(0,12) %>">
 							Server <%= server %> Image <%= j+1 %> 
 					</a></b>
+				</div>
+				<div class="col-md-4">
+				<i onclick="stopContainer('<%=ip%>','<%=re[j]["Id"]%>')" class="fa fa-stop"></i>
+				<i class="fa fa-refresh"></i>
+				</div>
 				</div>
 			</div>
 			<div class="panel-body">

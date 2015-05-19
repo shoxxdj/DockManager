@@ -9,7 +9,7 @@
 			<div id="basicInfo" class="panel-body">
 
 				<div class="loader">
-					<center>Loading</center>
+					<center><i class="fa fa-spinner fa-pulse fa-5x"></i></center>
 				</div>
 
 			</div><!-- end of panel body -->
@@ -32,6 +32,19 @@ function getBasicInfo(){
 	});
 }
 
+function stopContainer(ip,id){
+	$.ajax({
+		url:'/stopContainer/'+ip+'/'+id,
+		type : 'GET',
+		success: function(html){
+			if(!html=="error")
+			{
+				$("#"+id).html("Container has been stoped");
+			}
+		}
+	});
+
+}
 
 $(document).ready(function()
 {

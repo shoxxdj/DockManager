@@ -59,6 +59,44 @@ app.get('/basicInfo',function(req,res){
 		});
 
 });
+
+app.get('/stopContainer/:ip/:image',function(req,res){
+	var adresse=req.params.ip;
+	var image=req.params.image;
+
+	var client = requestJson.createClient('http://'+adresse+':'+port+'/');
+	client.post('containers/'+image+'/stop?t=5', null, function(err, response, body) {
+		console.log(response.statusCode);
+	if(response.statusCode==204)
+	{
+	  	res.end("success");
+	}
+	else
+	{
+		res.end("error");
+	}
+		
+	});
+});
+
+app.get('/restartContainer/:ip/:image',function(req,res){
+	var ip=req.params.ip;
+	var image=req.params.image;
+
+	request('http://'+ip+':'+port+'/containers/'+image+'/restart',function(error,response,body)
+	{
+		if(response.statusCode==204){
+			res.end("success");
+		}
+		else
+		{
+			res.end("error");
+		}
+	});
+
+});
+
+
 //Images Page
 app.get('/runnableImages',function(req,res){
 	runnable_images=[];
@@ -286,6 +324,46 @@ app.get('/process/:address/:id',function(req,res){
 		res.render('error.ejs');
 	}
 });
+
+//Server Page
+
+app.get('/servers',function(req,res){
+	running_images=[];
+	async.each(devices, //Array to loop
+		function(item,callback) // To do for each item in array
+		{
+			console.log(item);
+			request('http://'+item+':'+port+'/version',function(error,response,body)
+			{
+				if(!error && response.statusCode==200)
+				{
+					running_images.push(item);
+					running_images.push(JSON.parse(body));
+					callback(); // ne pas oublier !
+				}
+				else
+				{
+					callback();
+				}
+			});
+		},
+		function(err) // une fois que tout est finit faire : 
+		{
+			res.render('servers.ejs',{res:running_images});
+		});
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Run Server ! 
 var server= app.listen(3000,function(){
