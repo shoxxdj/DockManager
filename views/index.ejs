@@ -43,7 +43,31 @@ function stopContainer(ip,id){
 			}
 		}
 	});
+}
 
+function restartContainer(ip,id)
+{
+	$("#"+id).addClass("fa-spin");
+	$("#"+id).html("");
+	$.ajax({
+		url:'/restartContainer/'+ip+'/'+id,
+		type : 'GET',
+		success: function(html)
+		{
+			$("#restart_"+id).html(" Restarted ! ");
+			var count = 5;
+			var countdown = setInterval(function(){
+				if (count == 0) {
+					clearInterval(countdown);
+					$("#"+id).removeClass("fa-spin");
+					$("#restart_"+id).html("");
+				}
+				count--;
+			}, 1000);
+		}
+
+	});
+	
 }
 
 $(document).ready(function()

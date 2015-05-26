@@ -26,7 +26,8 @@ for (var i=0;i<res.length;i++)
 				</div>
 				<div class="col-md-4">
 				<i onclick="stopContainer('<%=ip%>','<%=re[j]["Id"]%>')" class="fa fa-stop"></i>
-				<i class="fa fa-refresh"></i>
+				<i onclick="restartContainer('<%=ip%>','<%=(re[j]["Id"]).substring(0,12)%>')" id='<%=(re[j]["Id"]).substring(0,12)%>' class="fa fa-refresh"></i>
+				<span id="restart_<%=(re[j]["Id"]).substring(0,12)%>"></span>
 				</div>
 				</div>
 			</div>

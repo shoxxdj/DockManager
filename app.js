@@ -83,8 +83,9 @@ app.get('/restartContainer/:ip/:image',function(req,res){
 	var ip=req.params.ip;
 	var image=req.params.image;
 
-	request('http://'+ip+':'+port+'/containers/'+image+'/restart',function(error,response,body)
-	{
+	var client = requestJson.createClient('http://'+ip+':'+port+'/');
+	client.post('containers/'+image+'/restart?t=5', null, function(err, response, body) {
+		console.log(response);
 		if(response.statusCode==204){
 			res.end("success");
 		}
